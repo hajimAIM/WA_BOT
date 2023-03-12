@@ -57,25 +57,18 @@ func eventHandler(evt interface{}) {
 			case "Menu", "menu", "/Menu", "/menu", "MENU":
 				replyStr = "Berikut adalah menu pilihan:"
 				replyMsg := &waProto.Message{ // parse the button struct, this will send a text with button!
-					ButtonsMessage: &waProto.ButtonsMessage{
-						HeaderType:  waProto.ButtonsMessage_TEXT.Enum(),
-						ContentText: proto.String(replyStr),
-						Buttons: []*waProto.Button{
-							{
-								ButtonId: proto.String("YES"),
-								ButtonText: &waProto.ButtonText{
-									DisplayText: proto.String("TEST YES"),
-								},
-							},
-							{
-								ButtonId: proto.String("NO"),
-								ButtonText: &waProto.ButtonText{
-									DisplayText: proto.String("TEST NO"),
+					TemplateMessage: &waProto.TemplateMessage{
+						HydratedTemplate: &waProto.HydratedFourRowTemplate{
+							HydratedContentText: proto.String("TEST 1"),
+							HydratedFooterText: proto.String("TEST 2"),
+							HydratedButtons: []*HydratedTemplateButton{
+								&proto.HydratedTemplateButton_QuickReplyButton {
+									DisplayText: proto.String("TEST QUICK REPLY BUTTON"),
+									Id: proto.String("test1"),
 								},
 							},
 						},
-						FooterText: proto.String("Pilih salah satu opsi di atas."),
-					},
+					}
 				}
 				fmt.Println("MENGHANTAR MENU")
 				WAClient.SendMessage(event.Info.Sender, "", replyMsg)
