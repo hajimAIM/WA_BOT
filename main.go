@@ -25,6 +25,8 @@ var (
 		"601160564476@s.whatsapp.net",
 
 		"60122412026@s.whatsapp.net",
+
+		"60132270058@s.whatsapp.net",
 	}
 )
 
@@ -54,7 +56,7 @@ func eventHandler(evt interface{}) {
 				}
 			case "Menu", "menu", "/Menu", "/menu", "MENU":
 				replyStr = "Berikut adalah menu pilihan:"
-				replyMsg := &waProto.Message{
+				replyMsg := &waProto.Message{ // parse the button struct, this will send a text with button!
 					ButtonsMessage: &waProto.ButtonsMessage{
 						HeaderType:  waProto.ButtonsMessage_TEXT.Enum(),
 						ContentText: proto.String(replyStr),
