@@ -24,7 +24,7 @@ var (
 	recipientNumbers = []string{
 		"601160564476@s.whatsapp.net",
 
-		"60122412026@s.whatsapp.net",
+		"60122412027@s.whatsapp.net",
 
 		"60132270058@s.whatsapp.net",
 	}
@@ -46,6 +46,47 @@ func eventHandler(evt interface{}) {
 			log.Infof(`Received new message -> "%s"`, msg)
 
 			replyStr := "Pesan ini automatik, menggunakan GO!. Anda mengirim pesan: " + msg
+			replyMsg := &waProto.Message{
+				ListMessage: &waProto.ListMessage{
+					Title:       proto.String("ListMessage title"),
+					Description: proto.String("ListMessage Description"),
+					FooterText:  proto.String("ListMessage footer"),
+					ButtonText:  proto.String("ListMessage ButtonText"),
+					ListType:    waProto.ListMessage_SINGLE_SELECT.Enum(),
+					Sections: []*waProto.Section{
+						{
+							Title: proto.String("Section1 title"),
+							Rows: []*waProto.Row{
+								{
+									RowId:       proto.String("id1"),
+									Title:       proto.String("ListMessage section row title"),
+									Description: proto.String("ListMessage section row desc"),
+								},
+								{
+									RowId:       proto.String("id2"),
+									Title:       proto.String("title 2"),
+									Description: proto.String("desc 2"),
+								},
+							},
+						},
+						{
+							Title: proto.String("Section2 title"),
+							Rows: []*waProto.Row{
+								{
+									RowId:       proto.String("id1"),
+									Title:       proto.String("ListMessage section row title"),
+									Description: proto.String("ListMessage section row desc"),
+								},
+								{
+									RowId:       proto.String("id2"),
+									Title:       proto.String("title 2"),
+									Description: proto.String("desc 2"),
+								},
+							},
+						},
+					},
+				},
+			}
 
 			switch msg {
 			case "/admin", "/Admin", "Admin", "admin", "ADMIN":
@@ -55,23 +96,9 @@ func eventHandler(evt interface{}) {
 					replyStr = "Pesan ini automatik, menggunakan GO!. Anda mengirim pesan: " + msg
 				}
 			case "Menu", "menu", "/Menu", "/menu", "MENU":
-				replyStr = "Berikut adalah menu pilihan:"
-				replyMsg := &waProto.Message{ // parse the button struct, this will send a text with button!
-					TemplateMessage: &waProto.TemplateMessage{
-						HydratedTemplate: &waProto.HydratedFourRowTemplate{
-							HydratedContentText: proto.String("TEST 1"),
-							HydratedFooterText: proto.String("TEST 2"),
-							HydratedButtons: []*HydratedTemplateButton{
-								&proto.HydratedTemplateButton_QuickReplyButton {
-									DisplayText: proto.String("TEST QUICK REPLY BUTTON"),
-									Id: proto.String("test1"),
-								},
-							},
-						},
-					}
-				}
-				fmt.Println("MENGHANTAR MENU")
+				replyStr = "Sila pilih menu di atas"
 				WAClient.SendMessage(event.Info.Sender, "", replyMsg)
+
 			}
 
 			WAClient.SendMessage(event.Info.Sender, "", &waProto.Message{
